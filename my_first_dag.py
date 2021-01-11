@@ -1,6 +1,11 @@
 from airflow import DAG
-from airflow.operators import BashOperator
+from airflow.operators import BashOperator, PythonOperator
 from datetime import datetime, timedelta
+
+
+def say_my_hello():
+    """This is a function is used to say hello from a python function, will be used for python operator"""
+    print("Hello from Python")
 
 
 default_args = {
@@ -27,10 +32,11 @@ t2 = BashOperator(
     bash_command='echo "Hello from Task 2"',
     dag=dag)
 
-t3 = BashOperator(
+t3 = PythonOperator(
     task_id='task_3',
-    bash_command='echo "Hello from Task 3"',
-    dag=dag)
+    python_callable=say_my_hello,
+    dag=dag,
+)
 
 t4 = BashOperator(
     task_id='task_4',
